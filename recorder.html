@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Voice Clarifier - บันทึกเสียง</title>
+  <style>
+    body {
+      font-family: 'Kanit', sans-serif;
+      background-color: #e0f0d9;
+      color: #2d6a0a;
+      margin: 0; padding: 0;
+      transition: background-color 0.5s, color 0.5s;
+    }
+    header {
+      position: sticky; top: 0; background: #a6c8a9; padding: 15px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    header nav a {
+      color: #2d6a0a; margin: 0 10px; text-decoration: none; font-weight: bold;
+    }
+    header nav a:hover {
+      text-decoration: underline;
+    }
+    .dark-mode {
+      background-color: #222;
+      color: #ccc;
+    }
+    .dark-mode header {
+      background: #444;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 15px;
+    }
+    button {
+      background-color: #2d6a0a;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1b4304;
+    }
+    #recordingStatus {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    audio {
+      margin-top: 15px;
+      width: 100%;
+      outline: none;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div><h1>AI Voice Clarifier</h1></div>
+  <nav>
+    <a href="index.html">หน้าแรก</a>
+    <a href="about.html">เกี่ยวกับ</a>
+    <a href="recorder.html">บันทึกเสียง</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h2>บันทึกเสียงและเล่นเสียง</h2>
+  <button id="recordBtn">เริ่มบันทึก</button>
+  <button id="stopBtn" disabled>หยุดบันทึก</button>
+  <p id="recordingStatus"></p>
+  <audio id="audioPlayback" controls></audio>
+</div>
+
+<script>
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  if (darkModeToggle) {
+    darkModeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+    });
+  }
+
+  const recordBtn = document.getElementById('recordBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  const recordingStatus = document.getElementById('recordingStatus');
+  const audioPlayback = document.getElementById('audioPlayback');
+
+  let mediaRecorder;
+  let audioChunks = [];
+
+  recordBtn.onclick = async () => {
+    if (!navigator.mediaDevices) {
+      alert("เบราว์เซอร์ของคุณไม่รองรับการบันทึกเสียง");
+      return;
+    }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      mediaRecorder.start();
+      recordingStatus.textContent = "กำลังบันทึก...";
+      recordBtn.disabled = true;
+      stopBtn.disabled = false;
+      audioChunks = [];
+
+      mediaRecorder.ondataavailable = e => {
+        audioChunks.push(e.data);
+      };
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        audioPlayback.src = audioUrl;
+        recordingStatus.textContent = "บันทึกเสร็จแล้ว";
+      };
+    } catch (err) {
+      alert("ไม่สามารถเข้าถึงไมโครโฟน: " + err.message);
+    }
+  };
+
+  stopBtn.onclick = () => {
+    mediaRecorder.stop();
+    recordBtn.disabled = false;
+    stopBtn.disabled = true;
+  };
+</script>
+
+</body>
+</html>
