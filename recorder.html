@@ -2,130 +2,83 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI Voice Clarifier - บันทึกเสียง</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>บันทึกเสียงและเลือกฟีเจอร์</title>
   <style>
-    body {
-      font-family: 'Kanit', sans-serif;
-      background-color: #e0f0d9;
-      color: #2d6a0a;
-      margin: 0; padding: 0;
-      transition: background-color 0.5s, color 0.5s;
-    }
-    header {
-      position: sticky; top: 0; background: #a6c8a9; padding: 15px;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    header nav a {
-      color: #2d6a0a; margin: 0 10px; text-decoration: none; font-weight: bold;
-    }
-    header nav a:hover {
-      text-decoration: underline;
-    }
-    .dark-mode {
-      background-color: #222;
-      color: #ccc;
-    }
-    .dark-mode header {
-      background: #444;
-    }
-    .container {
-      max-width: 900px;
-      margin: 40px auto;
-      padding: 0 15px;
-    }
-    button {
-      background-color: #2d6a0a;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #1b4304;
-    }
-    #recordingStatus {
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    audio {
-      margin-top: 15px;
-      width: 100%;
-      outline: none;
-      border-radius: 6px;
-    }
+    body { font-family: 'Sarabun', sans-serif; padding: 20px; }
+    button { margin: 10px; padding: 10px 20px; }
+    #features { margin-top: 20px; display: none; }
+    audio { margin-top: 15px; display: block; width: 100%; }
   </style>
 </head>
 <body>
 
-<header>
-  <div><h1>AI Voice Clarifier</h1></div>
-  <nav>
-    <a href="index.html">หน้าแรก</a>
-    <a href="about.html">เกี่ยวกับ</a>
-    <a href="recorder.html">บันทึกเสียง</a>
-  </nav>
-</header>
+<h1>🎙️ บันทึกเสียง</h1>
 
-<div class="container">
-  <h2>บันทึกเสียงและเล่นเสียง</h2>
-  <button id="recordBtn">เริ่มบันทึก</button>
-  <button id="stopBtn" disabled>หยุดบันทึก</button>
-  <p id="recordingStatus"></p>
-  <audio id="audioPlayback" controls></audio>
+<button id="startBtn">เริ่มบันทึก</button>
+<button id="stopBtn" disabled>หยุด</button>
+<p id="status">ยังไม่ได้เริ่มบันทึก</p>
+<audio id="audioPlayback" controls></audio>
+
+<div id="features">
+  <h2>🔧 เลือกฟีเจอร์</h2>
+  <button onclick="doFeature('translate')">🌐 แปลภาษา</button>
+  <button onclick="doFeature('navigate')">📍 นำทาง</button>
+  <button onclick="doFeature('speak')">🗣️ อ่านออกเสียง</button>
+  <button onclick="doFeature('text')">📄 แปลงเป็นข้อความ</button>
 </div>
 
 <script>
-  const darkModeToggle = document.getElementById('darkModeToggle');
-  if (darkModeToggle) {
-    darkModeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-    });
-  }
-
-  const recordBtn = document.getElementById('recordBtn');
-  const stopBtn = document.getElementById('stopBtn');
-  const recordingStatus = document.getElementById('recordingStatus');
-  const audioPlayback = document.getElementById('audioPlayback');
-
   let mediaRecorder;
   let audioChunks = [];
 
-  recordBtn.onclick = async () => {
-    if (!navigator.mediaDevices) {
-      alert("เบราว์เซอร์ของคุณไม่รองรับการบันทึกเสียง");
-      return;
-    }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorder = new MediaRecorder(stream);
-      mediaRecorder.start();
-      recordingStatus.textContent = "กำลังบันทึก...";
-      recordBtn.disabled = true;
-      stopBtn.disabled = false;
-      audioChunks = [];
+  const startBtn = document.getElementById('startBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  const statusText = document.getElementById('status');
+  const audioPlayback = document.getElementById('audioPlayback');
+  const featuresDiv = document.getElementById('features');
 
-      mediaRecorder.ondataavailable = e => {
-        audioChunks.push(e.data);
-      };
-      mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-        const audioUrl = URL.createObjectURL(audioBlob);
-        audioPlayback.src = audioUrl;
-        recordingStatus.textContent = "บันทึกเสร็จแล้ว";
-      };
-    } catch (err) {
-      alert("ไม่สามารถเข้าถึงไมโครโฟน: " + err.message);
-    }
+  startBtn.onclick = async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorder = new MediaRecorder(stream);
+    mediaRecorder.start();
+    statusText.textContent = "🎙️ กำลังบันทึก...";
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
+    audioChunks = [];
+
+    mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+    mediaRecorder.onstop = () => {
+      const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+      const audioUrl = URL.createObjectURL(audioBlob);
+      audioPlayback.src = audioUrl;
+      statusText.textContent = "✅ บันทึกเสร็จแล้ว";
+      featuresDiv.style.display = "block";
+    };
   };
 
   stopBtn.onclick = () => {
     mediaRecorder.stop();
-    recordBtn.disabled = false;
+    startBtn.disabled = false;
     stopBtn.disabled = true;
   };
+
+  function doFeature(feature) {
+    switch (feature) {
+      case 'translate':
+        alert("📌 กำลังแปลเสียง (ระบบจริงเชื่อม API ได้)");
+        break;
+      case 'navigate':
+        alert("📌 ฟีเจอร์นำทาง (อาจเชื่อม Google Maps)");
+        break;
+      case 'speak':
+        alert("📌 ระบบจะอ่านข้อความออกเสียง");
+        break;
+      case 'text':
+        alert("📌 ระบบจะแปลงเสียงเป็นข้อความ");
+        break;
+    }
+  }
 </script>
 
 </body>
