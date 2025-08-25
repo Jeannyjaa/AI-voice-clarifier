@@ -4,16 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AI Voice Clarifier</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary: #a8d5ba;
+      --accent: #4caf50;
+      --bg: #f9fafb;
+      --text: #333;
+      --white: #ffffff;
+    }
+
+    body.dark-mode {
+      --primary: #2e7d32;
+      --accent: #a5d6a7;
+      --bg: #121212;
+      --text: #f1f1f1;
+      --white: #1e1e1e;
+    }
+
     body {
       margin: 0;
       font-family: "Sarabun", sans-serif;
-      background-color: #f9fafb;
-      color: #333;
+      background-color: var(--bg);
+      color: var(--text);
+      transition: background-color 0.3s, color 0.3s;
     }
 
     header {
-      background-color: #0288d1; /* ใช้สีหลักจากไฟล์แรก */
+      background-color: var(--primary);
       color: white;
       padding: 50px 20px;
       text-align: center;
@@ -39,7 +57,7 @@
     }
 
     h2 {
-      color: #0288d1;
+      color: var(--accent);
     }
 
     .features {
@@ -49,14 +67,14 @@
     }
 
     .feature-box {
-      background: white;
+      background: var(--white);
       border-radius: 10px;
       padding: 25px;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
     }
 
     .feature-box h3 {
-      color: #0288d1;
+      color: var(--accent);
       margin-top: 0;
     }
 
@@ -64,8 +82,67 @@
       line-height: 1.8em;
     }
 
+    .image-box {
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    .image-box img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-section {
+      background-color: var(--white);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-section form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-section input {
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+
+    .form-section button {
+      padding: 12px;
+      background-color: var(--accent);
+      color: white;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .form-section button:hover {
+      background-color: #388e3c;
+    }
+
+    .dark-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
     footer {
-      background-color: #0288d1;
+      background-color: var(--primary);
       color: white;
       text-align: center;
       padding: 30px 10px;
@@ -79,6 +156,8 @@
   </style>
 </head>
 <body>
+
+  <button class="dark-toggle" onclick="toggleDarkMode()">🌓 โหมดมืด</button>
 
   <header>
     <h1>AI Voice Clarifier</h1>
@@ -94,6 +173,9 @@
       AI Voice Clarifier เป็นแพลตฟอร์มที่ใช้เทคโนโลยีปัญญาประดิษฐ์ในการฟัง วิเคราะห์ และแปลเสียงพูดแบบเรียลไทม์  
       โดยออกแบบมาเพื่อช่วยลดอุปสรรคด้านการสื่อสาร โดยเฉพาะกับผู้สูงอายุ หรือผู้ที่มีภาษาพูดแตกต่างกัน
     </p>
+    <div class="image-box">
+      <img src="https://source.unsplash.com/featured/?technology,audio" alt="Minimal AI Tech Image">
+    </div>
   </section>
 
   <section>
@@ -129,33 +211,31 @@
   </section>
 
   <section>
-    <h2>เสียงจากผู้ใช้งานจริง</h2>
-    <div class="features">
-      <div class="feature-box">
-        <p><em>“คุณแม่อายุ 75 ปี ฟังไม่ค่อยทันเวลาคุยกับหลาน ๆ ผ่านวิดีโอคอล พอใช้ AI Voice Clarifier ก็ได้ยินชัดเจนขึ้นเยอะเลยค่ะ”</em></p>
-        <p><strong>– คุณสุรีย์, กรุงเทพฯ</strong></p>
-      </div>
-      <div class="feature-box">
-        <p><em>“ผมทำงานในพื้นที่ภาคเหนือ การใช้ภาษาถิ่นกับชาวบ้านเป็นเรื่องสำคัญ ระบบนี้ช่วยให้การแปลเสียงพูดแบบภาษากลางเป็นคำเมืองทำได้แบบเรียลไทม์ ดีมากครับ”</em></p>
-        <p><strong>– หมอภาคย์, เชียงราย</strong></p>
-      </div>
-      <div class="feature-box">
-        <p><em>“เราใช้ระบบนี้ในศูนย์ดูแลผู้สูงอายุ ทุกคนรู้สึกว่าสื่อสารกับเจ้าหน้าที่ได้ง่ายขึ้น โดยเฉพาะคนที่พูดอีสานหรือใต้”</em></p>
-        <p><strong>– ผู้ดูแลศูนย์, นครราชสีมา</strong></p>
-      </div>
-    </div>
-  </section>
-
-  <section>
     <h2>เริ่มต้นใช้งาน</h2>
-    <p>AI Voice Clarifier พร้อมให้คุณทดลองใช้เร็ว ๆ นี้</p>
-    <p><strong>เวอร์ชันทดลองเปิดให้ลงทะเบียนล่วงหน้า</strong></p>
-    <!-- สามารถใส่ฟอร์มลงทะเบียนที่นี่ -->
+    <div class="form-section">
+      <p><strong>ลงทะเบียนล่วงหน้าเพื่อทดลองเวอร์ชันใหม่ก่อนใคร</strong></p>
+      <form onsubmit="submitForm(event)">
+        <input type="text" placeholder="ชื่อของคุณ" required />
+        <input type="tel" placeholder="เบอร์โทรศัพท์" required />
+        <button type="submit">ลงทะเบียนตอนนี้</button>
+      </form>
+      <p id="formMessage" style="color: green; margin-top: 10px;"></p>
+    </div>
   </section>
 
   <footer>
     &copy; 2025 AI Voice Clarifier | เพื่อการสื่อสารที่ไม่ทิ้งใครไว้ข้างหลัง
   </footer>
 
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+
+    function submitForm(event) {
+      event.preventDefault();
+      document.getElementById('formMessage').innerText = "✅ ขอบคุณ! ระบบได้รับข้อมูลของคุณแล้ว";
+    }
+  </script>
 </body>
 </html>
