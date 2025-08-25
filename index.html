@@ -83,6 +83,11 @@
       color: var(--accent);
     }
 
+    nav a.active {
+      border-bottom: 3px solid var(--accent);
+      font-weight: bolder;
+    }
+
     section {
       padding: 50px 20px;
       max-width: 900px;
@@ -182,7 +187,7 @@
   </header>
 
   <nav>
-    <a href="index.html">หน้าแรก</a>
+    <a href="index.html" class="active">หน้าแรก</a>
     <a href="about.html">เกี่ยวกับ</a>
     <a href="recorder.html">บันทึกเสียง</a>
   </nav>
