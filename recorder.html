@@ -30,6 +30,13 @@
       background-color: #2d6a0a;
       color: white;
     }
+    /* เพิ่มคลาส active ให้ลิงก์ที่เป็นหน้าปัจจุบัน */
+    nav a.active {
+      background-color: #2d6a0a;
+      color: white;
+      cursor: default;
+      pointer-events: none; /* ปิดการคลิก */
+    }
     button {
       background-color: #2d6a0a;
       color: white;
@@ -65,7 +72,7 @@
 <nav>
   <a href="index.html">หน้าแรก</a>
   <a href="about.html">เกี่ยวกับ</a>
-  <a href="recorder.html">บันทึกเสียง</a>
+  <a href="recorder.html" class="active">บันทึกเสียง</a> <!-- ใส่ class active -->
 </nav>
 
 <h1>🎙️ บันทึกเสียงและฟีเจอร์</h1>
