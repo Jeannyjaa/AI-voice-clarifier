@@ -138,6 +138,22 @@
       padding: 30px 10px;
     }
 
+    nav {
+      text-align: center; 
+      margin-bottom: 20px;
+    }
+
+    nav a {
+      color: var(--accent);
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: bold;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
     @media (max-width: 768px) {
       .features {
         grid-template-columns: 1fr;
@@ -156,6 +172,12 @@
       โดยเฉพาะผู้สูงอายุและผู้ที่มีข้อจำกัดด้านภาษา ผ่านระบบแปลเสียงอัตโนมัติที่รองรับหลากหลายภาษาและภาษาถิ่นของไทย
     </p>
   </header>
+
+  <nav>
+    <a href="index.html">หน้าแรก</a> | 
+    <a href="record.html">อัดเสียง</a> | 
+    <a href="about.html">เกี่ยวกับ</a>
+  </nav>
 
   <section>
     <h2>AI Voice Clarifier คืออะไร?</h2>
@@ -206,10 +228,13 @@
       <form id="registerForm" onsubmit="submitForm(event)">
         <input type="text" id="name" placeholder="ชื่อของคุณ" required />
         <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์" required />
+        <!-- ถ้าต้องการเพิ่ม email ให้เอาคอมเม้นต์ข้างล่างออก -->
+        <!-- <input type="email" id="email" placeholder="อีเมล (ถ้ามี)" /> -->
+
         <button type="button" onclick="sendOTP()">ขอ OTP</button>
 
         <div id="otpSection" style="display:none;">
-          <input type="text" id="otp" placeholder="กรอกรหัส OTP" />
+          <input type="text" id="otp" placeholder="กรอกรหัส OTP" autocomplete="off" />
           <button type="button" onclick="verifyOTP()">ยืนยัน OTP</button>
         </div>
 
@@ -258,6 +283,11 @@
         alert('กรุณากรอกรหัส OTP');
         return;
       }
+      
+      if (!/^\d{6}$/.test(otp)) {
+        alert('รหัส OTP ต้องเป็นตัวเลข 6 หลัก');
+        return;
+      }
 
       if (otp === demoOTP) {
         document.getElementById('formMessage').innerText = '✅ ยืนยันสำเร็จ! สามารถลงทะเบียนได้';
@@ -273,6 +303,12 @@
       event.preventDefault();
       document.getElementById('formMessage').innerText = "✅ ขอบคุณ! ระบบได้รับข้อมูลของคุณแล้ว";
       document.getElementById('formMessage').style.color = 'green';
+
+      // TODO: ส่งข้อมูลไป backend จริง ๆ ได้ที่นี่ (ถ้ามี)
+      // ตัวอย่าง
+      // const name = document.getElementById('name').value.trim();
+      // const phone = document.getElementById('phone').value.trim();
+      // ...
     }
   </script>
 
