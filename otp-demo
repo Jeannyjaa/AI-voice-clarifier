@@ -1,3 +1,3 @@
-npm init -y
-npm install express body-parser
-node server.js
+<input type="text" name="phone" placeholder="กรอกเบอร์โทร">
+<button onclick="sendOTP()">ส่ง OTP</button>
+
