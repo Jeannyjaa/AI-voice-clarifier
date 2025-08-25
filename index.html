@@ -63,6 +63,26 @@
       margin-right: auto;
     }
 
+    nav {
+      text-align: center;
+      margin-bottom: 20px;
+      background-color: var(--primary);
+      padding: 10px 0;
+    }
+
+    nav a {
+      margin: 0 15px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1em;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--accent);
+    }
+
     section {
       padding: 50px 20px;
       max-width: 900px;
@@ -107,6 +127,8 @@
     .form-section form {
       display: flex;
       flex-direction: column;
+      max-width: 400px;
+      margin: auto;
     }
 
     .form-section input {
@@ -125,6 +147,7 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      margin-bottom: 10px;
     }
 
     .form-section button:hover {
@@ -136,22 +159,7 @@
       color: white;
       text-align: center;
       padding: 30px 10px;
-    }
-
-    nav {
-      text-align: center; 
-      margin-bottom: 20px;
-    }
-
-    nav a {
-      color: var(--accent);
-      text-decoration: none;
-      margin: 0 10px;
-      font-weight: bold;
-    }
-
-    nav a:hover {
-      text-decoration: underline;
+      margin-top: 50px;
     }
 
     @media (max-width: 768px) {
@@ -174,8 +182,7 @@
   </header>
 
   <nav>
-    <a href="index.html">หน้าแรก</a> | 
-    <a href="record.html">อัดเสียง</a> | 
+    <a href="index.html">หน้าแรก</a>
     <a href="about.html">เกี่ยวกับ</a>
   </nav>
 
@@ -228,13 +235,10 @@
       <form id="registerForm" onsubmit="submitForm(event)">
         <input type="text" id="name" placeholder="ชื่อของคุณ" required />
         <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์" required />
-        <!-- ถ้าต้องการเพิ่ม email ให้เอาคอมเม้นต์ข้างล่างออก -->
-        <!-- <input type="email" id="email" placeholder="อีเมล (ถ้ามี)" /> -->
-
         <button type="button" onclick="sendOTP()">ขอ OTP</button>
 
         <div id="otpSection" style="display:none;">
-          <input type="text" id="otp" placeholder="กรอกรหัส OTP" autocomplete="off" />
+          <input type="text" id="otp" placeholder="กรอกรหัส OTP" />
           <button type="button" onclick="verifyOTP()">ยืนยัน OTP</button>
         </div>
 
@@ -262,13 +266,10 @@
         return;
       }
 
-      // แจ้งว่ากำลังส่ง OTP
       alert(`📡 กำลังส่งรหัส OTP ไปยังเบอร์ ${phone}...`);
 
-      // สร้าง OTP จำลอง 6 หลัก
       demoOTP = Math.floor(100000 + Math.random() * 900000).toString();
 
-      // แสดง OTP เดโม่ (แค่ทดสอบ)
       setTimeout(() => {
         alert(`🔐 รหัส OTP ของคุณคือ: ${demoOTP}`);
         document.getElementById('otpSection').style.display = 'block';
@@ -281,11 +282,6 @@
       const otp = document.getElementById('otp').value.trim();
       if (!otp) {
         alert('กรุณากรอกรหัส OTP');
-        return;
-      }
-      
-      if (!/^\d{6}$/.test(otp)) {
-        alert('รหัส OTP ต้องเป็นตัวเลข 6 หลัก');
         return;
       }
 
@@ -304,11 +300,7 @@
       document.getElementById('formMessage').innerText = "✅ ขอบคุณ! ระบบได้รับข้อมูลของคุณแล้ว";
       document.getElementById('formMessage').style.color = 'green';
 
-      // TODO: ส่งข้อมูลไป backend จริง ๆ ได้ที่นี่ (ถ้ามี)
-      // ตัวอย่าง
-      // const name = document.getElementById('name').value.trim();
-      // const phone = document.getElementById('phone').value.trim();
-      // ...
+      // สามารถเพิ่มโค้ดส่งข้อมูลไปเซิร์ฟเวอร์ได้ที่นี่
     }
   </script>
 
