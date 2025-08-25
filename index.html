@@ -59,10 +59,76 @@
       }
 
       try {
-        // ตัวอย่างส่งข้อมูลไปเซิฟเวอร์ (ต้องแก้ URL ตามจริง)
-        const response = await fetch('/send-otp', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phone }),
-        });
-        const data = await response.json();
+        // ตัวอย่างใช้ dummy response แทน fetch จริง
+        // ถ้าใช้ fetch จริงต้องมี backend รองรับ endpoint นี้
+        // const response = await fetch('/send-otp', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify({ phone }),
+        // });
+        // const data = await response.json();
+
+        // dummy data:
+        const data = { success: true, message: 'ส่ง OTP เรียบร้อยแล้ว' };
+
+        document.getElementById('formMessage').style.color = data.success ? 'green' : 'red';
+        document.getElementById('formMessage').innerText = data.message;
+        if (data.success) {
+          document.getElementById('otpSection').style.display = 'block';
+        }
+      } catch (error) {
+        document.getElementById('formMessage').style.color = 'red';
+        document.getElementById('formMessage').innerText = 'เกิดข้อผิดพลาดในการส่ง OTP';
+      }
+    }
+
+    async function verifyOTP() {
+      const phone = document.getElementById('phone').value.trim();
+      const otp = document.getElementById('otp').value.trim();
+
+      if (!otp) {
+        alert('กรุณากรอกรหัส OTP');
+        return;
+      }
+
+      try {
+        // dummy data:
+        const data = otp === '123456'
+          ? { success: true, message: 'OTP ถูกต้อง' }
+          : { success: false, message: 'OTP ไม่ถูกต้อง' };
+
+        document.getElementById('formMessage').style.color = data.success ? 'green' : 'red';
+        document.getElementById('formMessage').innerText = data.message;
+
+        if (data.success) {
+          document.getElementById('submitBtn').style.display = 'block';
+          document.querySelector('form button[type="button"]').style.display = 'none';
+          document.getElementById('otpSection').style.display = 'none';
+        }
+      } catch (error) {
+        document.getElementById('formMessage').style.color = 'red';
+        document.getElementById('formMessage').innerText = 'เกิดข้อผิดพลาดในการตรวจสอบ OTP';
+      }
+    }
+
+    function submitRegistration(event) {
+      event.preventDefault();
+      alert('OTP ของคุณคือ 123456 (demo)');
+
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      if (!name || !phone) {
+        alert('กรุณากรอกชื่อและเบอร์โทรศัพท์ให้ครบถ้วน');
+        return;
+      }
+
+      document.getElementById('formMessage').style.color = 'green';
+      document.getElementById('formMessage').innerText = `✅ ขอบคุณคุณ ${name}! ระบบได้รับข้อมูลของคุณแล้ว`;
+
+      document.getElementById('registerForm').reset();
+      document.getElementById('submitBtn').style.display = 'none';
+      document.querySelector('form button[type="button"]').style.display = 'inline-block';
+    }
+  </script>
+</body>
+</html>
