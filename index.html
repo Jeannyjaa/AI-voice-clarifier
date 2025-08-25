@@ -2,133 +2,381 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AI Voice Clarifier - ลงทะเบียน OTP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Voice Clarifier</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary: #a8d5ba;
+      --accent: #4caf50;
+      --bg: #f9fafb;
+      --text: #333;
+      --white: #ffffff;
+    }
+
     body.dark-mode {
-      background-color: #121212;
-      color: #eee;
+      --primary: #2e7d32;
+      --accent: #a5d6a7;
+      --bg: #121212;
+      --text: #f1f1f1;
+      --white: #1e1e1e;
     }
-    #otpSection {
-      display: none;
+
+    body {
+      margin: 0;
+      font-family: "Sarabun", sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      transition: background-color 0.3s, color 0.3s;
     }
-    #submitBtn {
-      display: none;
+
+    header {
+      background-color: var(--primary);
+      color: white;
+      padding: 50px 20px;
+      text-align: center;
     }
-    #formMessage {
-      margin-top: 10px;
-      font-weight: bold;
+
+    header h1 {
+      margin: 0;
+      font-size: 2.8em;
+    }
+
+    header p {
+      font-size: 1.2em;
+      margin-top: 15px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    section {
+      padding: 50px 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h2 {
+      color: var(--accent);
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+
+    .feature-box {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .feature-box h3 {
+      color: var(--accent);
+      margin-top: 0;
+    }
+
+    ul {
+      line-height: 1.8em;
+    }
+
+    .image-box {
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    .image-box img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-section {
+      background-color: var(--white);
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-section form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-section input {
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+
+    .form-section button {
+      padding: 12px;
+      background-color: var(--accent);
+      color: white;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .form-section button:hover {
+      background-color: #388e3c;
+    }
+
+    .dark-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    footer {
+      background-color: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 30px 10px;
+    }
+
+    @media (max-width: 768px) {
+      .features {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <h2>ฟอร์มลงทะเบียน</h2>
-  <form id="registerForm" onsubmit="submitRegistration(event)">
-    <label for="name">ชื่อ:</label><br />
-    <input type="text" id="name" name="name" /><br /><br />
 
-    <label for="phone">เบอร์โทรศัพท์:</label><br />
-    <input type="text" id="phone" name="phone" /><br /><br />
+  <button class="dark-toggle" onclick="toggleDarkMode()">🌓 โหมดมืด</button>
 
-    <button type="button" onclick="requestOTP()">ขอรหัส OTP</button><br /><br />
+  <header>
+    <h1>AI Voice Clarifier</h1>
+    <p>
+      แพลตฟอร์มอัจฉริยะที่ช่วยให้การสื่อสารระหว่างผู้คนง่ายขึ้น  
+      โดยเฉพาะผู้สูงอายุและผู้ที่มีข้อจำกัดด้านภาษา ผ่านระบบแปลเสียงอัตโนมัติที่รองรับหลากหลายภาษาและภาษาถิ่นของไทย
+    </p>
+  </header>
 
-    <div id="otpSection">
-      <label for="otp">กรอกรหัส OTP:</label><br />
-      <input type="text" id="otp" name="otp" /><br /><br />
-      <button type="button" onclick="verifyOTP()">ตรวจสอบ OTP</button>
+  <section>
+    <h2>AI Voice Clarifier คืออะไร?</h2>
+    <p>
+      AI Voice Clarifier เป็นแพลตฟอร์มที่ใช้เทคโนโลยีปัญญาประดิษฐ์ในการฟัง วิเคราะห์ และแปลเสียงพูดแบบเรียลไทม์  
+      โดยออกแบบมาเพื่อช่วยลดอุปสรรคด้านการสื่อสาร โดยเฉพาะกับผู้สูงอายุ หรือผู้ที่มีภาษาพูดแตกต่างกัน
+    </p>
+    <div class="image-box">
+      <img src="https://source.unsplash.com/featured/?technology,audio" alt="Minimal AI Tech Image">
     </div>
+  </section>
 
-    <button type="submit" id="submitBtn">ลงทะเบียน</button>
-  </form>
+  <section>
+    <h2>จุดเด่นของระบบ</h2>
+    <div class="features">
+      <div class="feature-box">
+        <h3>รองรับภาษาถิ่นของไทย</h3>
+        <p>สามารถแปลเสียงจากภาษากลางเป็นภาษาถิ่น เช่น อีสาน เหนือ ใต้ หรือแปลกลับได้</p>
+      </div>
+      <div class="feature-box">
+        <h3>แปลหลายภาษาแบบเรียลไทม์</h3>
+        <p>รองรับการแปลภาษาไทย อังกฤษ จีน และภาษาอื่น ๆ เพื่อการสื่อสารที่ไม่สะดุด</p>
+      </div>
+      <div class="feature-box">
+        <h3>เหมาะกับผู้สูงอายุ</h3>
+        <p>เสียงพูดที่ผ่านการปรับให้ชัดเจนขึ้น เข้าใจง่าย ฟังสบาย ไม่ต้องเพ่งฟัง</p>
+      </div>
+      <div class="feature-box">
+        <h3>ใช้งานง่ายบนหลายอุปกรณ์</h3>
+        <p>สามารถใช้ผ่านสมาร์ทโฟน แท็บเล็ต หรือคอมพิวเตอร์ได้ทันที</p>
+      </div>
+    </div>
+  </section>
 
-  <div id="formMessage"></div>
+  <section>
+    <h2>เหมาะกับใคร?</h2>
+    <ul>
+      <li>ผู้สูงอายุที่ต้องการสื่อสารกับคนรุ่นใหม่</li>
+      <li>บุคลากรทางการแพทย์ที่ให้บริการในพื้นที่ต่างจังหวัด</li>
+      <li>ครอบครัวที่มีสมาชิกหลายวัย/ต่างภาษา</li>
+      <li>ผู้ดูแลศูนย์ผู้สูงอายุ หรือโรงพยาบาล</li>
+    </ul>
+  </section>
 
-  <br />
-  <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+  <section>
+    <h2>เริ่มต้นใช้งาน</h2>
+    <div class="form-section">
+      <p><strong>ลงทะเบียนล่วงหน้าเพื่อทดลองเวอร์ชันใหม่ก่อนใคร</strong></p>
+      <form onsubmit="submitForm(event)">
+        <input type="text" placeholder="ชื่อของคุณ" required />
+        <input type="tel" placeholder="เบอร์โทรศัพท์" required />
+        <button type="submit">ลงทะเบียนตอนนี้</button>
+      </form>
+      <p id="formMessage" style="color: green; margin-top: 10px;"></p>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 AI Voice Clarifier | เพื่อการสื่อสารที่ไม่ทิ้งใครไว้ข้างหลัง
+  </footer>
 
   <script>
     function toggleDarkMode() {
       document.body.classList.toggle('dark-mode');
     }
 
-    async function requestOTP() {
-      const phone = document.getElementById('phone').value.trim();
-      if (!phone) {
-        alert('กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง');
-        return;
-      }
-
-      try {
-        // ตัวอย่างใช้ dummy response แทน fetch จริง
-        // ถ้าใช้ fetch จริงต้องมี backend รองรับ endpoint นี้
-        // const response = await fetch('/send-otp', {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify({ phone }),
-        // });
-        // const data = await response.json();
-
-        // dummy data:
-        const data = { success: true, message: 'ส่ง OTP เรียบร้อยแล้ว' };
-
-        document.getElementById('formMessage').style.color = data.success ? 'green' : 'red';
-        document.getElementById('formMessage').innerText = data.message;
-        if (data.success) {
-          document.getElementById('otpSection').style.display = 'block';
-        }
-      } catch (error) {
-        document.getElementById('formMessage').style.color = 'red';
-        document.getElementById('formMessage').innerText = 'เกิดข้อผิดพลาดในการส่ง OTP';
-      }
-    }
-
-    async function verifyOTP() {
-      const phone = document.getElementById('phone').value.trim();
-      const otp = document.getElementById('otp').value.trim();
-
-      if (!otp) {
-        alert('กรุณากรอกรหัส OTP');
-        return;
-      }
-
-      try {
-        // dummy data:
-        const data = otp === '123456'
-          ? { success: true, message: 'OTP ถูกต้อง' }
-          : { success: false, message: 'OTP ไม่ถูกต้อง' };
-
-        document.getElementById('formMessage').style.color = data.success ? 'green' : 'red';
-        document.getElementById('formMessage').innerText = data.message;
-
-        if (data.success) {
-          document.getElementById('submitBtn').style.display = 'block';
-          document.querySelector('form button[type="button"]').style.display = 'none';
-          document.getElementById('otpSection').style.display = 'none';
-        }
-      } catch (error) {
-        document.getElementById('formMessage').style.color = 'red';
-        document.getElementById('formMessage').innerText = 'เกิดข้อผิดพลาดในการตรวจสอบ OTP';
-      }
-    }
-
-    function submitRegistration(event) {
+    function submitForm(event) {
       event.preventDefault();
-      alert('OTP ของคุณคือ 123456 (demo)');
-
-      const name = document.getElementById('name').value.trim();
-      const phone = document.getElementById('phone').value.trim();
-      if (!name || !phone) {
-        alert('กรุณากรอกชื่อและเบอร์โทรศัพท์ให้ครบถ้วน');
-        return;
-      }
-
-      document.getElementById('formMessage').style.color = 'green';
-      document.getElementById('formMessage').innerText = `✅ ขอบคุณคุณ ${name}! ระบบได้รับข้อมูลของคุณแล้ว`;
-
-      document.getElementById('registerForm').reset();
-      document.getElementById('submitBtn').style.display = 'none';
-      document.querySelector('form button[type="button"]').style.display = 'inline-block';
+      document.getElementById('formMessage').innerText = "✅ ขอบคุณ! ระบบได้รับข้อมูลของคุณแล้ว";
     }
   </script>
 </body>
 </html>
+
+// server.js
+const express = require('express');
+const bodyParser = require('body-parser');
+const path = require('path');
+
+const app = express();
+app.use(bodyParser.json());
+
+// เก็บ OTP ชั่วคราว
+const otpStore = {};
+
+// เสิร์ฟหน้าเว็บ HTML แบบง่าย ๆ
+app.get('/', (req, res) => {
+  res.send(`
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ลงทะเบียนพร้อม OTP จำลอง</title>
+<style>
+  body {
+    font-family: 'Sarabun', sans-serif;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #e8f5e9;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  }
+  input, button {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 1em;
+  }
+  button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #388e3c;
+  }
+  #otp-section {
+    display: none;
+  }
+  #message {
+    margin-top: 15px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<h2>ลงทะเบียนด้วยเบอร์โทร (ระบบจำลอง OTP)</h2>
+
+<input type="tel" id="phone" placeholder="เบอร์โทรศัพท์" />
+<button onclick="sendOTP()">ขอรหัส OTP</button>
+
+<div id="otp-section">
+  <input type="text" id="otp" placeholder="กรอกรหัส OTP" />
+  <button onclick="verifyOTP()">ยืนยัน OTP</button>
+</div>
+
+<p id="message"></p>
+
+<script>
+  async function sendOTP() {
+    const phone = document.getElementById('phone').value.trim();
+    if (!phone) {
+      alert('กรุณากรอกเบอร์โทรให้ถูกต้อง');
+      return;
+    }
+    const res = await fetch('/send-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone })
+    });
+    const data = await res.json();
+    document.getElementById('message').innerText = data.message;
+    if (data.success) {
+      document.getElementById('otp-section').style.display = 'block';
+    }
+  }
+
+  async function verifyOTP() {
+    const phone = document.getElementById('phone').value.trim();
+    const otp = document.getElementById('otp').value.trim();
+    if (!otp) {
+      alert('กรุณากรอกรหัส OTP');
+      return;
+    }
+    const res = await fetch('/verify-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone, otp })
+    });
+    const data = await res.json();
+    document.getElementById('message').innerText = data.message;
+  }
+</script>
+
+</body>
+</html>
+  `);
+});
+
+// API ส่ง OTP (จำลอง)
+app.post('/send-otp', (req, res) => {
+  const { phone } = req.body;
+  if (!phone) {
+    return res.json({ success: false, message: 'กรุณากรอกเบอร์โทร' });
+  }
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  otpStore[phone] = otp;
+  console.log(ส่ง OTP ให้เบอร์ ${phone} คือ ${otp}); // แสดง OTP ใน console เพื่อทดสอบ
+  res.json({ success: true, message: 'ส่งรหัส OTP แล้ว (ดูรหัสใน console)' });
+});
+
+// API ตรวจสอบ OTP
+app.post('/verify-otp', (req, res) => {
+  const { phone, otp } = req.body;
+  if (!phone || !otp) {
+    return res.json({ success: false, message: 'ข้อมูลไม่ครบถ้วน' });
+  }
+  const validOtp = otpStore[phone];
+  if (validOtp && validOtp === otp) {
+    delete otpStore[phone];
+    res.json({ success: true, message: 'ยืนยัน OTP สำเร็จ!' });
+  } else {
+    res.json({ success: false, message: 'รหัส OTP ไม่ถูกต้อง' });
+  }
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(Server running at http://localhost:${PORT});
+});
