@@ -128,7 +128,6 @@
       background-color: #388e3c;
     }
 
-    /* ปุ่มโหมดมืดอยู่มุมขวาบน */
     .dark-toggle {
       position: fixed;
       top: 20px;
@@ -163,4 +162,105 @@
   <header>
     <h1>AI Voice Clarifier</h1>
     <p>
-      แพลตฟอร์มอัจฉ
+      แพลตฟอร์มอัจฉริยะที่ช่วยให้การสื่อสารระหว่างผู้คนง่ายขึ้น  
+      โดยเฉพาะผู้สูงอายุและผู้ที่มีข้อจำกัดด้านภาษา ผ่านระบบแปลเสียงอัตโนมัติที่รองรับหลากหลายภาษาและภาษาถิ่นของไทย
+    </p>
+  </header>
+
+  <section>
+    <h2>เริ่มต้นใช้งาน</h2>
+    <div class="form-section">
+      <p><strong>ลงทะเบียนล่วงหน้าเพื่อทดลองเวอร์ชันใหม่ก่อนใคร</strong></p>
+      <form id="registerForm" onsubmit="submitRegistration(event)">
+        <input type="text" id="name" placeholder="ชื่อของคุณ" required />
+        <input type="tel" id="phone" placeholder="เบอร์โทรศัพท์" required />
+        <button type="button" onclick="requestOTP()">ขอ OTP</button>
+
+        <div id="otpSection" style="display:none;">
+          <input type="text" id="otp" placeholder="กรอกรหัส OTP" />
+          <button type="button" onclick="verifyOTP()">ยืนยัน OTP</button>
+        </div>
+
+        <button id="submitBtn" type="submit" style="display:none;">ลงทะเบียนตอนนี้</button>
+      </form>
+      <p id="formMessage" style="margin-top: 10px;"></p>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 AI Voice Clarifier | เพื่อการสื่อสารที่ไม่ทิ้งใครไว้ข้างหลัง
+  </footer>
+
+  <script>
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+    }
+
+    async function requestOTP() {
+      const phone = document.getElementById('phone').value.trim();
+      if (!phone) {
+        alert('กรุณากรอกเบอร์โทรศัพท์ให้ถูกต้อง');
+        return;
+      }
+
+      try {
+        const response = await fetch('/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone })
+        });
+        const data = await response.json();
+        document.getElementById('formMessage').style.color = data.success ? 'green' : 'red';
+        document.getElementById('formMessage').innerText = data.message;
+        if (data.success) {
+          document.getElementById('otpSection').style.display = 'block';
+        }
+      } catch (error) {
+        document.getElementById('formMessage').style.color = 'red';
+        document.getElementById('formMessage').innerText = 'เกิดข้อผิดพลาดในการส่ง OTP';
+      }
+    }
+
+    async function verifyOTP() {
+      const phone = document.getElementById('phone').value.trim();
+      const otp = document.getElementById('otp').value.trim();
+
+      if (!otp) {
+        alert('กรุณากรอกรหัส OTP');
+        return;
+      }
+
+      try {
+        const response = await fetch('/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ phone, otp })
+        });
+        const data = await response.json();
+        document.getElementById('formMessage').style.color = data.success ? 'green' : 'red';
+        document.getElementById('formMessage').innerText = data.message;
+
+        if (data.success) {
+          document.getElementById('submitBtn').style.display = 'block';
+          document.querySelector('form button[type="button"]').style.display = 'none';
+          document.getElementById('otpSection').style.display = 'none';
+        }
+      } catch (error) {
+        document.getElementById('formMessage').style.color = 'red';
+        document.getElementById('formMessage').innerText = 'เกิดข้อผิดพลาดในการตรวจสอบ OTP';
+      }
+    }
+
+    function submitRegistration(event) {
+      event.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+
+      if (!name || !phone) {
+        alert('กรุณากรอกชื่อและเบอร์โทรศัพท์ให้ครบถ้วน');
+        return;
+      }
+
+      alert('OTP ของคุณคือ 123456 (demo)');
+      document.getElementById('formMessage').style.color = 'green';
+      document.getElementById
